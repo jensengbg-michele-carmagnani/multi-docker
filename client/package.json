@@ -14,6 +14,7 @@
     "axios": "0.18.0"
   },
   "scripts": {
+    - docker run -e CI=true USERNAME/react-test npm test
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

@@ -1,0 +1,25 @@
+sudo: required
+sevices:
+  - docker
+
+before_install: 
+  - docker build -t karma80/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run karma80/react-test npm test -- --coverages 
+
+after_success: 
+  - docker build -t karma80/multi-client ./client
+  - docker build -t karma80/multi-nginx ./nginx
+  - docker build -t karma80/multi-sever ./sever
+  - docker build -t karma80/multi-worker ./worker
+
+  # Log into the docker CLI 
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # take the images and push in docker hub
+  - docker push karma80/multi-client
+  - docker push karma80/multi-nginx
+  - docker push karma80/multi-server
+  - docker push karma80/multi-worker
+
+  
